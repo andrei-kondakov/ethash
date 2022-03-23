@@ -2,7 +2,7 @@
 # Copyright 2019 Pawel Bylica.
 # Licensed under the Apache License, Version 2.0.
 
-from _ethash import ffi, lib
+from _etchash import ffi, lib
 
 
 def keccak_256(data):

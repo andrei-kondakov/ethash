@@ -133,8 +133,14 @@ epoch_context_full* create_epoch_context(int epoch_number, bool full) noexcept
     if (epoch_number < 0 || epoch_number > max_epoch_number)
         return nullptr;
 
-    const int light_cache_num_items = calculate_light_cache_num_items(epoch_number);
-    const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_number);
+    // ECIP-1099
+    int epoch_ecip1099 = epoch_number;
+    if (epoch_number >= 390) {
+        epoch_ecip1099 = epoch_number / 2;
+    }
+
+    const int light_cache_num_items = calculate_light_cache_num_items(epoch_ecip1099);
+    const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_ecip1099);
     const size_t light_cache_size = get_light_cache_size(light_cache_num_items);
     const size_t full_dataset_size =
         full ? static_cast<size_t>(full_dataset_num_items) * sizeof(hash1024) : 0;

@@ -67,18 +67,18 @@ class build_ext(setuptools_build_ext):
 
 
 setup(
-    name='ethash',
-    version='0.9.0-alpha.0',
+    name='pyetchash2',
+    version='0.0.1',
     description=
-    "C/C++ implementation of Ethash – the Ethereum Proof of Work algorithm",
-    url='https://github.com/chfast/ethash',
-    author='Paweł Bylica',
-    author_email='pawel@ethereum.org',
+    "C/C++ implementation of Ethash with ECIP-1099 – the Ethereum Classic Proof of Work algorithm",
+    url='https://github.com/andrei-kondakov/ethash',
+    author='Paweł Bylica, Andrei Kondakov',
+    author_email='pawel@ethereum.org, and.kondakov94@gmail.com',
     license='Apache License, Version 2.0',
 
     package_dir={'': 'bindings/python'},
-    packages=['ethash'],
-    cffi_modules=['bindings/python/ethash/_build.py:ffibuilder'],
+    packages=['etchash'],
+    cffi_modules=['bindings/python/etchash/_build.py:ffibuilder'],
 
     python_requires='>=3.6',
     setup_requires=['cffi>=1.12'],

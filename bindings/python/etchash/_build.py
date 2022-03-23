@@ -20,7 +20,7 @@ if sys.platform == 'linux':
     stdlib.append('stdc++')
 
 ffibuilder.set_source(
-    "_ethash",
+    "_etchash",
     r"""
     #include <ethash/keccak.h>
     #include <ethash/ethash.h>

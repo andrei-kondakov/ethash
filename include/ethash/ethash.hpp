@@ -41,6 +41,9 @@ constexpr int epoch_length = ETHASH_EPOCH_LENGTH;
 constexpr int light_cache_item_size = ETHASH_LIGHT_CACHE_ITEM_SIZE;
 constexpr int full_dataset_item_size = ETHASH_FULL_DATASET_ITEM_SIZE;
 constexpr int num_dataset_accesses = ETHASH_NUM_DATASET_ACCESSES;
+// ECIP-1099
+constexpr int block_ecip1099 = ETHASH_ECIP1099_BLOCK;
+constexpr int epoch_length_ecip1099 = ETHASH_ECIP1099_EPOCH_LENGTH;
 
 constexpr int max_epoch_number = ETHASH_MAX_EPOCH_NUMBER;
 
@@ -88,7 +91,10 @@ static constexpr auto calculate_epoch_seed = ethash_calculate_epoch_seed;
 /// Calculates the epoch number out of the block number.
 inline constexpr int get_epoch_number(int block_number) noexcept
 {
-    return block_number / epoch_length;
+    if (block_number < block_ecip1099) {
+        return block_number / epoch_length;
+    }
+    return block_number / epoch_length_ecip1099;
 }
 
 /**

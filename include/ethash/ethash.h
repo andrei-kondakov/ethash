@@ -49,6 +49,10 @@ extern "C" {
 #define ETHASH_FULL_DATASET_ITEM_SIZE 128
 #define ETHASH_NUM_DATASET_ACCESSES 64
 
+// ECIP-1099
+#define ETHASH_ECIP1099_BLOCK 11700000
+#define ETHASH_ECIP1099_EPOCH_LENGTH 60000
+
 /// The maximum epoch number supported by this implementation.
 ///
 /// The value represents the last epoch where the light cache size fits 4GB size limit.
