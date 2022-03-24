@@ -7,3 +7,5 @@
 /bindings/python/**/*.egg-info
 /bindings/python/**/*.pyc
 /bindings/python/**/*.so
+
+/venv

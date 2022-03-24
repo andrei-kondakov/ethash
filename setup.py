@@ -67,13 +67,15 @@ class build_ext(setuptools_build_ext):
 
 
 setup(
-    name='ethash',
+    name='ethash2',
     version='0.9.0-alpha.0',
     description=
     "C/C++ implementation of Ethash – the Ethereum Proof of Work algorithm",
-    url='https://github.com/chfast/ethash',
+    url='https://github.com/andrei-kondakov/ethash',
     author='Paweł Bylica',
     author_email='pawel@ethereum.org',
+    maintainer='Andrei Kondakov',
+    maintainer_email='and.kondakov94@gmail.com',
     license='Apache License, Version 2.0',
 
     package_dir={'': 'bindings/python'},
