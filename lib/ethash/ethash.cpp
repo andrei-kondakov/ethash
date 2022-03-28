@@ -133,14 +133,8 @@ epoch_context_full* create_epoch_context(int epoch_number, bool full) noexcept
     if (epoch_number < 0 || epoch_number > max_epoch_number)
         return nullptr;
 
-    // ECIP-1099
-    int epoch_ecip1099 = epoch_number;
-    if (epoch_number >= 390) {
-        epoch_ecip1099 = epoch_number / 2;
-    }
-
-    const int light_cache_num_items = calculate_light_cache_num_items(epoch_ecip1099);
-    const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_ecip1099);
+    const int light_cache_num_items = calculate_light_cache_num_items(epoch_number);
+    const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_number);
     const size_t light_cache_size = get_light_cache_size(light_cache_num_items);
     const size_t full_dataset_size =
         full ? static_cast<size_t>(full_dataset_num_items) * sizeof(hash1024) : 0;
@@ -152,7 +146,7 @@ epoch_context_full* create_epoch_context(int epoch_number, bool full) noexcept
         return nullptr;  // Signal out-of-memory by returning null pointer.
 
     hash512* const light_cache = reinterpret_cast<hash512*>(alloc_data + context_alloc_size);
-    const hash256 epoch_seed = calculate_epoch_seed(epoch_number);
+    const hash256 epoch_seed = calculate_epoch_seed(epoch_number * 2);
     build_light_cache(light_cache, light_cache_num_items, epoch_seed);
 
     hash1024* const full_dataset =
