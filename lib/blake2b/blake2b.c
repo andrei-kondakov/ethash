@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#if __clang__
+#if defined(__clang__)
 #define ATTRIBUTE_NO_SANITIZE_UNSIGNED_INTEGER_OVERFLOW \
     __attribute__((no_sanitize("unsigned-integer-overflow")))
 #else
