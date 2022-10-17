@@ -1,6 +1,7 @@
 /build
 /cmake-build-*
 /.idea
+/.vscode
 
 /dist
 /.eggs

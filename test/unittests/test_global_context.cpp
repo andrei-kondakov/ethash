@@ -13,99 +13,99 @@
 
 using namespace ethash;
 
-TEST(managed_multithreaded, hash_all)
-{
-    constexpr size_t num_treads = 8;
+// TEST(managed_multithreaded, hash_all)
+// {
+//     constexpr size_t num_treads = 8;
 
-    std::array<std::future<void>, num_treads> futures;
-    for (auto& f : futures)
-    {
-        f = std::async(std::launch::async, [] {
-            for (const auto& t : hash_test_cases)
-            {
-                const hash256 header_hash = to_hash256(t.header_hash_hex);
-                const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-                const int epoch_number = get_epoch_number(t.block_number);
-                auto& context = get_global_epoch_context(epoch_number);
-                const result res = hash(context, header_hash, nonce);
-                EXPECT_EQ(to_hex(res.mix_hash), t.mix_hash_hex);
-                EXPECT_EQ(to_hex(res.final_hash), t.final_hash_hex);
-            }
-        });
-    }
-    for (auto& f : futures)
-        f.wait();
-}
+//     std::array<std::future<void>, num_treads> futures;
+//     for (auto& f : futures)
+//     {
+//         f = std::async(std::launch::async, [] {
+//             for (const auto& t : hash_test_cases)
+//             {
+//                 const hash256 header_hash = to_hash256(t.header_hash_hex);
+//                 const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//                 const int epoch_number = get_epoch_number(t.block_number);
+//                 auto& context = get_global_epoch_context(epoch_number);
+//                 const result res = hash(context, header_hash, nonce);
+//                 EXPECT_EQ(to_hex(res.mix_hash), t.mix_hash_hex);
+//                 EXPECT_EQ(to_hex(res.final_hash), t.final_hash_hex);
+//             }
+//         });
+//     }
+//     for (auto& f : futures)
+//         f.wait();
+// }
 
-TEST(managed_multithreaded, hash_parallel)
-{
-    std::vector<std::future<bool>> futures;
+// TEST(managed_multithreaded, hash_parallel)
+// {
+//     std::vector<std::future<bool>> futures;
 
-    for (const auto& t : hash_test_cases)
-    {
-        futures.emplace_back(std::async(std::launch::async, [&t] {
-            const hash256 header_hash = to_hash256(t.header_hash_hex);
-            const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-            const int epoch_number = get_epoch_number(t.block_number);
-            auto& context = get_global_epoch_context(epoch_number);
-            const result res = hash(context, header_hash, nonce);
-            return (to_hex(res.mix_hash) == t.mix_hash_hex) &&
-                   (to_hex(res.final_hash) == t.final_hash_hex);
-        }));
-    }
+//     for (const auto& t : hash_test_cases)
+//     {
+//         futures.emplace_back(std::async(std::launch::async, [&t] {
+//             const hash256 header_hash = to_hash256(t.header_hash_hex);
+//             const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//             const int epoch_number = get_epoch_number(t.block_number);
+//             auto& context = get_global_epoch_context(epoch_number);
+//             const result res = hash(context, header_hash, nonce);
+//             return (to_hex(res.mix_hash) == t.mix_hash_hex) &&
+//                    (to_hex(res.final_hash) == t.final_hash_hex);
+//         }));
+//     }
 
-    for (auto& f : futures)
-        EXPECT_TRUE(f.get());
-}
+//     for (auto& f : futures)
+//         EXPECT_TRUE(f.get());
+// }
 
-TEST(managed_multithreaded, verify_all)
-{
-    constexpr size_t num_treads = 8;
+// TEST(managed_multithreaded, verify_all)
+// {
+//     constexpr size_t num_treads = 8;
 
-    std::array<std::future<void>, num_treads> futures;
-    for (auto& f : futures)
-    {
-        f = std::async(std::launch::async, [] {
-            for (const auto& t : hash_test_cases)
-            {
-                const hash256 header_hash = to_hash256(t.header_hash_hex);
-                const hash256 mix_hash = to_hash256(t.mix_hash_hex);
-                const hash256 final_hash = to_hash256(t.final_hash_hex);
-                const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-                const hash256 boundary = final_hash;
-                const int epoch_number = get_epoch_number(t.block_number);
-                auto& context = get_global_epoch_context(epoch_number);
-                const auto ec =
-                    verify_against_boundary(context, header_hash, mix_hash, nonce, boundary);
-                EXPECT_EQ(ec, ETHASH_SUCCESS);
-            }
-        });
-    }
-    for (auto& f : futures)
-        f.wait();
-}
+//     std::array<std::future<void>, num_treads> futures;
+//     for (auto& f : futures)
+//     {
+//         f = std::async(std::launch::async, [] {
+//             for (const auto& t : hash_test_cases)
+//             {
+//                 const hash256 header_hash = to_hash256(t.header_hash_hex);
+//                 const hash256 mix_hash = to_hash256(t.mix_hash_hex);
+//                 const hash256 final_hash = to_hash256(t.final_hash_hex);
+//                 const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//                 const hash256 boundary = final_hash;
+//                 const int epoch_number = get_epoch_number(t.block_number);
+//                 auto& context = get_global_epoch_context(epoch_number);
+//                 const auto ec =
+//                     verify_against_boundary(context, header_hash, mix_hash, nonce, boundary);
+//                 EXPECT_EQ(ec, ETHASH_SUCCESS);
+//             }
+//         });
+//     }
+//     for (auto& f : futures)
+//         f.wait();
+// }
 
-TEST(managed_multithreaded, verify_parallel)
-{
-    std::vector<std::future<std::error_code>> futures;
+// TEST(managed_multithreaded, verify_parallel)
+// {
+//     std::vector<std::future<std::error_code>> futures;
 
-    for (const auto& t : hash_test_cases)
-    {
-        futures.emplace_back(std::async(std::launch::async, [&t] {
-            const hash256 header_hash = to_hash256(t.header_hash_hex);
-            const hash256 mix_hash = to_hash256(t.mix_hash_hex);
-            const hash256 final_hash = to_hash256(t.final_hash_hex);
-            const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-            const hash256 boundary = final_hash;
-            const int epoch_number = get_epoch_number(t.block_number);
-            auto& context = get_global_epoch_context(epoch_number);
-            return verify_against_boundary(context, header_hash, mix_hash, nonce, boundary);
-        }));
-    }
+//     for (const auto& t : hash_test_cases)
+//     {
+//         futures.emplace_back(std::async(std::launch::async, [&t] {
+//             const hash256 header_hash = to_hash256(t.header_hash_hex);
+//             const hash256 mix_hash = to_hash256(t.mix_hash_hex);
+//             const hash256 final_hash = to_hash256(t.final_hash_hex);
+//             const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//             const hash256 boundary = final_hash;
+//             const int epoch_number = get_epoch_number(t.block_number);
+//             auto& context = get_global_epoch_context(epoch_number);
+//             return verify_against_boundary(context, header_hash, mix_hash, nonce, boundary);
+//         }));
+//     }
 
-    for (auto& f : futures)
-        EXPECT_EQ(f.get(), ETHASH_SUCCESS);
-}
+//     for (auto& f : futures)
+//         EXPECT_EQ(f.get(), ETHASH_SUCCESS);
+// }
 
 TEST(managed_multithreaded, get_epoch_context_random)
 {

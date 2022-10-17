@@ -14,9 +14,11 @@ add_executable(
     test_difficulty.cpp
     test_ethash.cpp
     test_keccak.cpp
+    test_blake2b.cpp
     test_global_context.cpp
     test_primes.cpp
     test_version.cpp
+    test_ubqhash.cpp
 )
 
 set_source_files_properties(test_version.cpp PROPERTIES COMPILE_DEFINITIONS TEST_PROJECT_VERSION="${PROJECT_VERSION}")

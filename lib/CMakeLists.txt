@@ -3,6 +3,7 @@
 # Licensed under the Apache License, Version 2.0.
 
 add_subdirectory(keccak)
+add_subdirectory(blake2b)
 
 if(ETHASH_BUILD_ETHASH)
     add_subdirectory(ethash)

@@ -5,6 +5,7 @@
 #include "ethash-internal.hpp"
 
 #include "primes.h"
+#include <ethash/blake2b.hpp>
 #include <ethash/keccak.hpp>
 #include <cstdlib>
 #include <cstring>
@@ -99,11 +100,11 @@ namespace
 {
 void build_light_cache(hash512 cache[], int num_items, const hash256& seed) noexcept
 {
-    hash512 item = keccak512(seed.bytes, sizeof(seed));
+    hash512 item = blake2b512(seed.bytes, sizeof(seed));
     cache[0] = item;
     for (int i = 1; i < num_items; ++i)
     {
-        item = keccak512(item);
+        item = blake2b512(item);
         cache[i] = item;
     }
 
@@ -120,7 +121,7 @@ void build_light_cache(hash512 cache[], int num_items, const hash256& seed) noex
             // Second index.
             const uint32_t w = static_cast<uint32_t>(num_items + (i - 1)) % index_limit;
 
-            cache[i] = keccak512(bitwise_xor(cache[v], cache[w]));
+            cache[i] = blake2b512(bitwise_xor(cache[v], cache[w]));
         }
     }
 }

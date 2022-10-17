@@ -196,15 +196,15 @@ static dataset_size_test_case dataset_size_test_cases[] = {
     {-1, 0, 0},
 };
 
-TEST(ethash, light_cache_size)
-{
-    for (const auto& t : dataset_size_test_cases)
-    {
-        int num_items = calculate_light_cache_num_items(t.epoch_number);
-        size_t size = get_light_cache_size(num_items);
-        EXPECT_EQ(size, t.light_cache_size) << "epoch: " << t.epoch_number;
-    }
-}
+// TEST(ethash, light_cache_size)
+// {
+//     for (const auto& t : dataset_size_test_cases)
+//     {
+//         int num_items = calculate_light_cache_num_items(t.epoch_number);
+//         size_t size = get_light_cache_size(num_items);
+//         EXPECT_EQ(size, t.light_cache_size) << "epoch: " << t.epoch_number;
+//     }
+// }
 
 TEST(ethash, full_dataset_size)
 {
@@ -369,30 +369,30 @@ TEST(ethash, get_epoch_number)
     EXPECT_EQ(get_epoch_number(max_block), max_epoch_number);
 }
 
-TEST(ethash, light_cache)
-{
-    struct light_cache_test_case
-    {
-        const int epoch_number;
-        const char* const hash;
-    };
+// TEST(ethash, light_cache)
+// {
+//     struct light_cache_test_case
+//     {
+//         const int epoch_number;
+//         const char* const hash;
+//     };
 
-    light_cache_test_case test_cases[] = {
-        {0, "35ded12eecf2ce2e8da2e15c06d463aae9b84cb2530a00b932e4bbc484cde353"},
-        {171, "468ef97519bd780a0dbd19d46c099118d6f4b777c1b8d0d4b0d6f62a5018100e"},
-        {2047, "47e5913c1f0ffffa5ba1049f6d7960259a5e7e8736e3f032cc7a04e7b29ffb42"},
-    };
+//     light_cache_test_case test_cases[] = {
+//         {0, "35ded12eecf2ce2e8da2e15c06d463aae9b84cb2530a00b932e4bbc484cde353"},
+//         {171, "468ef97519bd780a0dbd19d46c099118d6f4b777c1b8d0d4b0d6f62a5018100e"},
+//         {2047, "47e5913c1f0ffffa5ba1049f6d7960259a5e7e8736e3f032cc7a04e7b29ffb42"},
+//     };
 
-    for (const auto& t : test_cases)
-    {
-        auto context = create_epoch_context(t.epoch_number);
-        const uint8_t* const light_cache_data = context->light_cache[0].bytes;
-        const size_t light_cache_size =
-            static_cast<size_t>(context->light_cache_num_items) * sizeof(context->light_cache[0]);
-        const hash256 light_cache_hash = keccak256(light_cache_data, light_cache_size);
-        EXPECT_EQ(light_cache_hash, to_hash256(t.hash));
-    }
-}
+//     for (const auto& t : test_cases)
+//     {
+//         auto context = create_epoch_context(t.epoch_number);
+//         const uint8_t* const light_cache_data = context->light_cache[0].bytes;
+//         const size_t light_cache_size =
+//             static_cast<size_t>(context->light_cache_num_items) * sizeof(context->light_cache[0]);
+//         const hash256 light_cache_hash = keccak256(light_cache_data, light_cache_size);
+//         EXPECT_EQ(light_cache_hash, to_hash256(t.hash));
+//     }
+// }
 
 TEST(ethash, create_context_invalid_epoch)
 {
@@ -508,184 +508,184 @@ TEST(ethash, fake_dataset_items)
 }
 
 
-TEST(ethash, dataset_items_epoch13)
-{
-    struct full_dataset_item_test_case
-    {
-        uint32_t index;
-        const char* hash1_hex;
-        const char* hash2_hex;
-    };
+// TEST(ethash, dataset_items_epoch13)
+// {
+//     struct full_dataset_item_test_case
+//     {
+//         uint32_t index;
+//         const char* hash1_hex;
+//         const char* hash2_hex;
+//     };
 
-    // clang-format off
-    full_dataset_item_test_case test_cases[] = {
-        {0,
-            "6526a7e7ab092dfd21ebe6ffa1225370886a9a9fc828f929775de6a2737a3b9d1bb728bd23a61478e9fbf837d317829292d469cbb1a90a29058c0f604aeee5a6",
-            "a2fe2a6253d8642b5dcc6a211b7f4d6ee9b60ac235ee2c9d64a064ea20e47fe4cdad99aa9c7dd5e2d71e58b7957ff91062d1f1c014cd4453db2ddb094056529b"},
-        {1,
-            "7a03a5f8e028db852542ce2f10d25b7dcdf9a25c3898aabe78b881ef58e56ffaedb24c870184a6f0513a65f09066e9f9224baf6f684e0c54e7ef400004ec9fb8",
-            "639f251bbee0b1114e687ea651717eb69c0b76bc673dd4c9d697f41c307d66bdbe92b26df3dda209f25d6784c7a1db5902c18323285255684359728f5ca6da31"},
-        {13,
-            "63886d5b8967584addad94d45d194209bdf05e34b11894575ad292bf6da94117224b6e0d7b57791438ff701d3a0d2a80f261cc2ebde97e3bfc8574bb3519593c",
-            "afec130195473d4389d0ea13ec33ba8048a4075043fd2f2bc502f534f4f600ddb3417e53a9f23918c5e134049ed2b8561f1165d8543852f7e9792fa6332c268c"},
-        {171,
-            "a3dabfb475532cbc59d8b6732e73f108bba7b325b90e32690f00ea08f8977a94774106b08314763d403b153bc27fb58d5b2b84955e3069e2e6e63718bc2d3a26",
-            "056c1c4861d530aa6aa962cfd8256828661c93a3985d4dfa88011b496e94b031e86650183c706488984d0d0302ed79d5c1ac977dc6881006cb2b0b6b76542067"},
-        {571,
-            "14276428b23db295620e56dc2212c4f75f4dc20545ad0d2fe5f08e7c99b5fb372bb342f098525e30ff49f2b66891d9973101c8b4579269311afbc6c0a8822bbd",
-            "1ed369ce428c0c768c9fcc45089e830e603baa3b6fb81f60ef4b652ac19ab90ce3b3b007fb5fc289bc822e82e3b6b9aaef51258cd6bfecf23c30ed576a246d6a"},
-        {620,
-            "d3df66afb0b84a35b6ddb32d1b04a30c814cad357c0e46bffa2f6cbf0d95c76eef10b3b59fdce344924981cfdacdf93accecfa6ffe8b5041640e83feccb26a9c",
-            "fb97636b8e8b9bb593ab2d0235bc803608901cb3484e277761d376baf03d6986caf24f00a37a5a970a5b0de551cc27d45b9bf6ce3986b18cd78d98c028e956b1"},
-        {514079,
-            "279fe53aec52daf6341580b4c43841b39157b66144733ddaa3b11886a9bc3a61892af817e0f1ff9ac374351aa7cc16f7ac55bbc0cd53aaa72747db9fe07d9938",
-            "793b56c9baafe3638d9b3bfdf09f136d9b01bf206919df571e3e6de7320822f6d1567c69240b28181d797d0ab53b342f17dcb9746bdc0afb75fd115e7aa244ec"},
-        {852881,
-            "9f877290e5ba25760b6719e12c06e7e8e36b5d2510354ec3e269e04c36146bd8c7f5a1aa4df47c7a0f1f139bdfb5a1a7108b7eadd41d7acb40532c4cff1619d1",
-            "a0b6e119086c1f26aa578c678374e59b49388941fe9a119d00a7c82214702d5626b810df756fb399a5cf54cb09ce6aa25ed99ebe3bcc92178c9180cf956189a5"},
-        {6133492,
-            "539f72291dd31e5234081057904daff0329bf0099726c20fa1f1b31377ac84acc60d64c29206ccc0191a5f797293c151f0d506fa2ef5daf70654654c349fbf70",
-            "764e27dd47579073a74f92ef843a11219629583ab6b9b4907dcededbacbea1ed8b3f7a36336dc9a39839faf4d5095e50d9632e9e23819d7f85daa0f87a6a2efa"},
-        {6133493,
-            "379a030e94c3718a7220dcc9865e600eea2bb049aa251e26d812c952fa9bedecfc2e9a04d421810d5ef2500e9d5a4a44d8d6e731414a7bd94268333f23368c59",
-            "609f6d9d852794d11cf748bdb1784662ee0080fed4c18683a74ef4fdb3a5c243c9b3981b87fe912ac8860ff1a021e115dae2c96f14de6387c802c9910290ead3"},
-        {211322105,
-            "b3bb7286d9840720319aa6dd4bc7f8b55cc38b1ff0151c4a46ffb4b2a99c6eeb966bde5efc7f3f0c3a753c338238e37e119b75e6c553f2aab575238e1ba07880",
-            "0b89a30d5ed6bf1959c6e4d265ddf941bed6ce579493726c7d98de68267bb0eccfb0dbdf7a2d0d45d900d7588995212a8618ea679ab08425922b5042a0fdb95c"},
-        {740620450,
-            "df0c2e2f4df033a64b1bcd207c30c7ce48c7d8ca8edd1284c87a91d54372ed0cb513d1876b1dbef6fc06c496941039cba6c50676596d6379152689d9841c97e4",
-            "357bacef5baf4687c87e7ff07d5ab104ce39badcf9633c22ee31c3c3de0887b296f9385ea27573cb94bc3423cc39ab2a733be97a98e860290c31e94f03f39814"},
-        {2147418082,  // Max index for epoch 32639.
-            "9705a12d9f1a193ffea9b9c6603b8d17315896b84ea6649e613fec1578c867535e6bbfd71cb18ce0c0dd6ca8051f7bfb5cfa2d89b29d1bf25a0b36ae57505844",
-            "c2f3475bf52ec727a0b684d9fbc5ce9234331abc585c383e87fa70e8c860819b35c12e6173df081f3f84bea218633ad54c9da6051ba90efc3985e887530cb89e"},
-        {0x7fffffff,  // Max allowed index value.
-            "d463d63e393e6ccc31b240d3d12301a14e0410377657b0554d6041541303c2ddc8ec026432adf73311b56de486f6fdca808f87f3824587b413a4e4f7a571d046",
-            "9e15d844f137ae66e7fc23934cc51d53a36ec28a5d1a246d50773471252ae9ea30fe20e817434e771bbf77577899cf2cce8de11578b925a12af2ad9dd316f0ec"},
-    };
-    // clang-format on
+//     // clang-format off
+//     full_dataset_item_test_case test_cases[] = {
+//         {0,
+//             "6526a7e7ab092dfd21ebe6ffa1225370886a9a9fc828f929775de6a2737a3b9d1bb728bd23a61478e9fbf837d317829292d469cbb1a90a29058c0f604aeee5a6",
+//             "a2fe2a6253d8642b5dcc6a211b7f4d6ee9b60ac235ee2c9d64a064ea20e47fe4cdad99aa9c7dd5e2d71e58b7957ff91062d1f1c014cd4453db2ddb094056529b"},
+//         {1,
+//             "7a03a5f8e028db852542ce2f10d25b7dcdf9a25c3898aabe78b881ef58e56ffaedb24c870184a6f0513a65f09066e9f9224baf6f684e0c54e7ef400004ec9fb8",
+//             "639f251bbee0b1114e687ea651717eb69c0b76bc673dd4c9d697f41c307d66bdbe92b26df3dda209f25d6784c7a1db5902c18323285255684359728f5ca6da31"},
+//         {13,
+//             "63886d5b8967584addad94d45d194209bdf05e34b11894575ad292bf6da94117224b6e0d7b57791438ff701d3a0d2a80f261cc2ebde97e3bfc8574bb3519593c",
+//             "afec130195473d4389d0ea13ec33ba8048a4075043fd2f2bc502f534f4f600ddb3417e53a9f23918c5e134049ed2b8561f1165d8543852f7e9792fa6332c268c"},
+//         {171,
+//             "a3dabfb475532cbc59d8b6732e73f108bba7b325b90e32690f00ea08f8977a94774106b08314763d403b153bc27fb58d5b2b84955e3069e2e6e63718bc2d3a26",
+//             "056c1c4861d530aa6aa962cfd8256828661c93a3985d4dfa88011b496e94b031e86650183c706488984d0d0302ed79d5c1ac977dc6881006cb2b0b6b76542067"},
+//         {571,
+//             "14276428b23db295620e56dc2212c4f75f4dc20545ad0d2fe5f08e7c99b5fb372bb342f098525e30ff49f2b66891d9973101c8b4579269311afbc6c0a8822bbd",
+//             "1ed369ce428c0c768c9fcc45089e830e603baa3b6fb81f60ef4b652ac19ab90ce3b3b007fb5fc289bc822e82e3b6b9aaef51258cd6bfecf23c30ed576a246d6a"},
+//         {620,
+//             "d3df66afb0b84a35b6ddb32d1b04a30c814cad357c0e46bffa2f6cbf0d95c76eef10b3b59fdce344924981cfdacdf93accecfa6ffe8b5041640e83feccb26a9c",
+//             "fb97636b8e8b9bb593ab2d0235bc803608901cb3484e277761d376baf03d6986caf24f00a37a5a970a5b0de551cc27d45b9bf6ce3986b18cd78d98c028e956b1"},
+//         {514079,
+//             "279fe53aec52daf6341580b4c43841b39157b66144733ddaa3b11886a9bc3a61892af817e0f1ff9ac374351aa7cc16f7ac55bbc0cd53aaa72747db9fe07d9938",
+//             "793b56c9baafe3638d9b3bfdf09f136d9b01bf206919df571e3e6de7320822f6d1567c69240b28181d797d0ab53b342f17dcb9746bdc0afb75fd115e7aa244ec"},
+//         {852881,
+//             "9f877290e5ba25760b6719e12c06e7e8e36b5d2510354ec3e269e04c36146bd8c7f5a1aa4df47c7a0f1f139bdfb5a1a7108b7eadd41d7acb40532c4cff1619d1",
+//             "a0b6e119086c1f26aa578c678374e59b49388941fe9a119d00a7c82214702d5626b810df756fb399a5cf54cb09ce6aa25ed99ebe3bcc92178c9180cf956189a5"},
+//         {6133492,
+//             "539f72291dd31e5234081057904daff0329bf0099726c20fa1f1b31377ac84acc60d64c29206ccc0191a5f797293c151f0d506fa2ef5daf70654654c349fbf70",
+//             "764e27dd47579073a74f92ef843a11219629583ab6b9b4907dcededbacbea1ed8b3f7a36336dc9a39839faf4d5095e50d9632e9e23819d7f85daa0f87a6a2efa"},
+//         {6133493,
+//             "379a030e94c3718a7220dcc9865e600eea2bb049aa251e26d812c952fa9bedecfc2e9a04d421810d5ef2500e9d5a4a44d8d6e731414a7bd94268333f23368c59",
+//             "609f6d9d852794d11cf748bdb1784662ee0080fed4c18683a74ef4fdb3a5c243c9b3981b87fe912ac8860ff1a021e115dae2c96f14de6387c802c9910290ead3"},
+//         {211322105,
+//             "b3bb7286d9840720319aa6dd4bc7f8b55cc38b1ff0151c4a46ffb4b2a99c6eeb966bde5efc7f3f0c3a753c338238e37e119b75e6c553f2aab575238e1ba07880",
+//             "0b89a30d5ed6bf1959c6e4d265ddf941bed6ce579493726c7d98de68267bb0eccfb0dbdf7a2d0d45d900d7588995212a8618ea679ab08425922b5042a0fdb95c"},
+//         {740620450,
+//             "df0c2e2f4df033a64b1bcd207c30c7ce48c7d8ca8edd1284c87a91d54372ed0cb513d1876b1dbef6fc06c496941039cba6c50676596d6379152689d9841c97e4",
+//             "357bacef5baf4687c87e7ff07d5ab104ce39badcf9633c22ee31c3c3de0887b296f9385ea27573cb94bc3423cc39ab2a733be97a98e860290c31e94f03f39814"},
+//         {2147418082,  // Max index for epoch 32639.
+//             "9705a12d9f1a193ffea9b9c6603b8d17315896b84ea6649e613fec1578c867535e6bbfd71cb18ce0c0dd6ca8051f7bfb5cfa2d89b29d1bf25a0b36ae57505844",
+//             "c2f3475bf52ec727a0b684d9fbc5ce9234331abc585c383e87fa70e8c860819b35c12e6173df081f3f84bea218633ad54c9da6051ba90efc3985e887530cb89e"},
+//         {0x7fffffff,  // Max allowed index value.
+//             "d463d63e393e6ccc31b240d3d12301a14e0410377657b0554d6041541303c2ddc8ec026432adf73311b56de486f6fdca808f87f3824587b413a4e4f7a571d046",
+//             "9e15d844f137ae66e7fc23934cc51d53a36ec28a5d1a246d50773471252ae9ea30fe20e817434e771bbf77577899cf2cce8de11578b925a12af2ad9dd316f0ec"},
+//     };
+//     // clang-format on
 
 
-    // Create example epoch context.
-    const auto context = create_epoch_context(13);
+//     // Create example epoch context.
+//     const auto context = create_epoch_context(13);
 
-    for (const auto& t : test_cases)
-    {
-        const hash1024 item = calculate_dataset_item_1024(*context, t.index);
-        EXPECT_EQ(to_hex(item.hash512s[0]), t.hash1_hex) << "index: " << t.index;
-        EXPECT_EQ(to_hex(item.hash512s[1]), t.hash2_hex) << "index: " << t.index;
-    }
-}
+//     for (const auto& t : test_cases)
+//     {
+//         const hash1024 item = calculate_dataset_item_1024(*context, t.index);
+//         EXPECT_EQ(to_hex(item.hash512s[0]), t.hash1_hex) << "index: " << t.index;
+//         EXPECT_EQ(to_hex(item.hash512s[1]), t.hash2_hex) << "index: " << t.index;
+//     }
+// }
 
-TEST(ethash, verify_hash_light)
-{
-    const hash256 zero{};
-    const hash256 one = inc(zero);
+// TEST(ethash, verify_hash_light)
+// {
+//     const hash256 zero{};
+//     const hash256 one = inc(zero);
 
-    epoch_context_ptr context{nullptr, ethash_destroy_epoch_context};
+//     epoch_context_ptr context{nullptr, ethash_destroy_epoch_context};
 
-    for (const auto& t : hash_test_cases)
-    {
-        const int epoch_number = t.block_number / epoch_length;
-        const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-        const hash256 header_hash = to_hash256(t.header_hash_hex);
-        const hash256 mix_hash = to_hash256(t.mix_hash_hex);
-        const hash256 boundary = to_hash256(t.final_hash_hex);
-        const hash256 difficulty = ethash_difficulty_to_boundary(&boundary);
+//     for (const auto& t : hash_test_cases)
+//     {
+//         const int epoch_number = t.block_number / epoch_length;
+//         const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//         const hash256 header_hash = to_hash256(t.header_hash_hex);
+//         const hash256 mix_hash = to_hash256(t.mix_hash_hex);
+//         const hash256 boundary = to_hash256(t.final_hash_hex);
+//         const hash256 difficulty = ethash_difficulty_to_boundary(&boundary);
 
-        if (!context || context->epoch_number != epoch_number)
-            context = create_epoch_context(epoch_number);
+//         if (!context || context->epoch_number != epoch_number)
+//             context = create_epoch_context(epoch_number);
 
-        result r = hash(*context, header_hash, nonce);
-        EXPECT_EQ(to_hex(r.final_hash), t.final_hash_hex);
-        EXPECT_EQ(to_hex(r.mix_hash), t.mix_hash_hex);
+//         result r = hash(*context, header_hash, nonce);
+//         EXPECT_EQ(to_hex(r.final_hash), t.final_hash_hex);
+//         EXPECT_EQ(to_hex(r.mix_hash), t.mix_hash_hex);
 
-        auto ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce, difficulty);
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
-        EXPECT_FALSE(ec);
-        EXPECT_EQ(ec.category(), ethash_category());
+//         auto ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce, difficulty);
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         EXPECT_FALSE(ec);
+//         EXPECT_EQ(ec.category(), ethash_category());
 
-        ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce, inc(difficulty));
-        EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//         ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce, inc(difficulty));
+//         EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
 
-        ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, boundary);
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, boundary);
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, dec(boundary));
-        EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//         ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, dec(boundary));
+//         EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
 
-        ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, inc(boundary));
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_boundary(*context, header_hash, mix_hash, nonce, inc(boundary));
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, difficulty);
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, difficulty);
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, dec(difficulty));
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, dec(difficulty));
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, inc(difficulty));
-        EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//         ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, inc(difficulty));
+//         EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
 
-        ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, zero);
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, zero);
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, one);
-        EXPECT_EQ(ec, ETHASH_SUCCESS);
+//         ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce, one);
+//         EXPECT_EQ(ec, ETHASH_SUCCESS);
 
-        const bool within_significant_boundary = r.final_hash.bytes[0] == 0;
-        if (within_significant_boundary)
-        {
-            ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce + 1, difficulty);
-            EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//         const bool within_significant_boundary = r.final_hash.bytes[0] == 0;
+//         if (within_significant_boundary)
+//         {
+//             ec = verify_final_hash_against_difficulty(header_hash, mix_hash, nonce + 1, difficulty);
+//             EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
 
-            ec = verify_against_boundary(*context, header_hash, mix_hash, nonce + 1, boundary);
-            EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//             ec = verify_against_boundary(*context, header_hash, mix_hash, nonce + 1, boundary);
+//             EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
 
-            ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce + 1, difficulty);
-            EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
-        }
-        else
-        {
-            ec = verify_against_boundary(*context, header_hash, mix_hash, nonce + 1, boundary);
-            EXPECT_EQ(ec, ETHASH_INVALID_MIX_HASH);
+//             ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce + 1, difficulty);
+//             EXPECT_EQ(ec, ETHASH_INVALID_FINAL_HASH);
+//         }
+//         else
+//         {
+//             ec = verify_against_boundary(*context, header_hash, mix_hash, nonce + 1, boundary);
+//             EXPECT_EQ(ec, ETHASH_INVALID_MIX_HASH);
 
-            ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce + 1, difficulty);
-            EXPECT_EQ(ec, ETHASH_INVALID_MIX_HASH);
-        }
-    }
-}
+//             ec = verify_against_difficulty(*context, header_hash, mix_hash, nonce + 1, difficulty);
+//             EXPECT_EQ(ec, ETHASH_INVALID_MIX_HASH);
+//         }
+//     }
+// }
 
-TEST(ethash, verify_hash)
-{
-    epoch_context_full_ptr context{nullptr, ethash_destroy_epoch_context_full};
+// TEST(ethash, verify_hash)
+// {
+//     epoch_context_full_ptr context{nullptr, ethash_destroy_epoch_context_full};
 
-    for (const auto& t : hash_test_cases)
-    {
-        const int epoch_number = t.block_number / epoch_length;
-        const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
-        const hash256 header_hash = to_hash256(t.header_hash_hex);
+//     for (const auto& t : hash_test_cases)
+//     {
+//         const int epoch_number = t.block_number / epoch_length;
+//         const uint64_t nonce = std::stoull(t.nonce_hex, nullptr, 16);
+//         const hash256 header_hash = to_hash256(t.header_hash_hex);
 
-        const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_number);
-        const uint64_t full_dataset_size = get_full_dataset_size(full_dataset_num_items);
+//         const int full_dataset_num_items = calculate_full_dataset_num_items(epoch_number);
+//         const uint64_t full_dataset_size = get_full_dataset_size(full_dataset_num_items);
 
-        if (!context || context->epoch_number != epoch_number)
-            context = create_epoch_context_full(epoch_number);
+//         if (!context || context->epoch_number != epoch_number)
+//             context = create_epoch_context_full(epoch_number);
 
-        if (sizeof(void*) == 4)
-        {
-            // On 32-bit systems expect failures for allocations > 1GB of memory.
-            static constexpr auto allocation_size_limit = uint64_t{1} * 1024 * 1024 * 1024;
-            if (!context && full_dataset_size > allocation_size_limit)
-                continue;
-        }
+//         if (sizeof(void*) == 4)
+//         {
+//             // On 32-bit systems expect failures for allocations > 1GB of memory.
+//             static constexpr auto allocation_size_limit = uint64_t{1} * 1024 * 1024 * 1024;
+//             if (!context && full_dataset_size > allocation_size_limit)
+//                 continue;
+//         }
 
-        ASSERT_NE(context, nullptr) << full_dataset_size;
-        EXPECT_GT(full_dataset_size, 0);
+//         ASSERT_NE(context, nullptr) << full_dataset_size;
+//         EXPECT_GT(full_dataset_size, 0);
 
-        result r = hash(*context, header_hash, nonce);
-        EXPECT_EQ(to_hex(r.final_hash), t.final_hash_hex);
-        EXPECT_EQ(to_hex(r.mix_hash), t.mix_hash_hex);
-    }
-}
+//         result r = hash(*context, header_hash, nonce);
+//         EXPECT_EQ(to_hex(r.final_hash), t.final_hash_hex);
+//         EXPECT_EQ(to_hex(r.mix_hash), t.mix_hash_hex);
+//     }
+// }
 
 TEST(ethash, verify_final_hash_only)
 {
@@ -702,34 +702,34 @@ TEST(ethash, verify_final_hash_only)
         ETHASH_INVALID_MIX_HASH);
 }
 
-TEST(ethash, verify_boundary)
-{
-    const auto& context = get_ethash_epoch_context_0();
-    const hash256 example_header_hash =
-        to_hash256("e74e5e8688d3c6f17885fa5e64eb6718046b57895a2a24c593593070ab71f5fd");
-    const uint64_t nonce = 6666;
-    const auto r = hash(context, example_header_hash, nonce);
-    const auto boundary_eq =
-        to_hash256("13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb7");
+// TEST(ethash, verify_boundary)
+// {
+//     const auto& context = get_ethash_epoch_context_0();
+//     const hash256 example_header_hash =
+//         to_hash256("e74e5e8688d3c6f17885fa5e64eb6718046b57895a2a24c593593070ab71f5fd");
+//     const uint64_t nonce = 6666;
+//     const auto r = hash(context, example_header_hash, nonce);
+//     const auto boundary_eq =
+//         to_hash256("13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb7");
 
-    const auto boundary_gt = inc(boundary_eq);
-    EXPECT_EQ(
-        to_hex(boundary_gt), "13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb8");
+//     const auto boundary_gt = inc(boundary_eq);
+//     EXPECT_EQ(
+//         to_hex(boundary_gt), "13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb8");
 
-    const auto boundary_lt = dec(boundary_eq);
-    EXPECT_EQ(
-        to_hex(boundary_lt), "13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb6");
+//     const auto boundary_lt = dec(boundary_eq);
+//     EXPECT_EQ(
+//         to_hex(boundary_lt), "13c5a668bba6b86ed16098113d9d6a7a5cac1802e9c8f2d57c932d8818375eb6");
 
-    EXPECT_EQ(r.final_hash, boundary_eq);
-    EXPECT_EQ(to_hex(r.final_hash), to_hex(boundary_eq));
+//     EXPECT_EQ(r.final_hash, boundary_eq);
+//     EXPECT_EQ(to_hex(r.final_hash), to_hex(boundary_eq));
 
-    EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_eq),
-        ETHASH_SUCCESS);
-    EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_gt),
-        ETHASH_SUCCESS);
-    EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_lt),
-        ETHASH_INVALID_FINAL_HASH);
-}
+//     EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_eq),
+//         ETHASH_SUCCESS);
+//     EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_gt),
+//         ETHASH_SUCCESS);
+//     EXPECT_EQ(verify_against_boundary(context, example_header_hash, r.mix_hash, nonce, boundary_lt),
+//         ETHASH_INVALID_FINAL_HASH);
+// }
 
 TEST(ethash_multithreaded, small_dataset)
 {

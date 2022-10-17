@@ -9,6 +9,7 @@ add_library(ethash::ethash ALIAS ethash)
 target_compile_features(ethash PUBLIC c_std_11 cxx_std_14)
 set_target_properties(ethash PROPERTIES C_EXTENSIONS OFF CXX_EXTENSIONS OFF)
 target_link_libraries(ethash PRIVATE ethash::keccak)
+target_link_libraries(ethash PRIVATE ethash::blake2b)
 target_include_directories(ethash PUBLIC $<BUILD_INTERFACE:${include_dir}>$<INSTALL_INTERFACE:include>)
 target_sources(ethash PRIVATE
     endianness.hpp

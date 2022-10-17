@@ -4,18 +4,26 @@
 
 import unittest
 
-import ethash
+import ubqhash
+
+# 2893974
+# ['0xe4d90fc8f41abb75', '0x16b1595978d442e24e3ae2e919c11c7a6b40dc30e628aa20362bcade8853a766', '0xf6f023da17cd7381e76e924a39d1cb064586ff98683337e0d9aff6d3994caed6']
+# b'\x00\x00\x00\x00\xd1\xbej\xd4\xa1_\xc3\xe1D\xaf=\xd5(\xb7)6:}\xd3\x18\xc8\xa6}\x8d\xf5\xa3\xfc\x1a'
+
+# 2904640
+# '0x258dfc351b37441f', '0xf2d723c43b2535c012e4ee5377f3276e9d568e823b44e2b7f9e8b3fdb78cea0a', '0xaa0647a72ee211c29d4929d30a9f1a30504c35469086a080927b51bfcd8bc8f4'
+# b'\x00\x00\x00\x01a\xe5\x99\x82\xadX\x1eJ\x99\x8duh\xc7\xeb\xb6\x96\x81\x1f>\x99m\xea`\x07$\xc3\x14\xd7'
 
 
-class TestEthash(unittest.TestCase):
-    epoch_number = 0
-    nonce = 0x4242424242424242
+class TestUbqhash(unittest.TestCase):
+    epoch_number = 96
+    nonce = 0x258dfc351b37441f
     header_hash = bytes.fromhex(
-        '2a8de2adf89af77358250bf908bf04ba94a6e8c3ba87775564a41d269a05e4ce')
+        'f2d723c43b2535c012e4ee5377f3276e9d568e823b44e2b7f9e8b3fdb78cea0a')
     mix_hash = bytes.fromhex(
-        '58f759ede17a706c93f13030328bcea40c1d1341fb26f2facd21ceb0dae57017')
+        'aa0647a72ee211c29d4929d30a9f1a30504c35469086a080927b51bfcd8bc8f4')
     final_hash = bytes.fromhex(
-        'dd47fd2d98db51078356852d7c4014e6a5d6c387c35f40e2875b74a256ed7906')
+        '0000000161e59982ad581e4a998d7568c7ebb696811f3e996dea600724c314d7')
 
     def test_keccak(self):
         h256 = ('c5d2460186f7233c927e7db2dcc703c0'
@@ -25,16 +33,16 @@ class TestEthash(unittest.TestCase):
                 'c00fa9caf9d87976ba469bcbe06713b4'
                 '35f091ef2769fb160cdab33d3670680e')
 
-        self.assertEqual(ethash.keccak_256(b'').hex(), h256)
-        self.assertEqual(ethash.keccak_512(b'').hex(), h512)
+        self.assertEqual(ubqhash.keccak_256(b'').hex(), h256)
+        self.assertEqual(ubqhash.keccak_512(b'').hex(), h512)
 
     def test_hash(self):
-        f, m = ethash.hash(0, self.header_hash, self.nonce)
+        f, m = ubqhash.hash(self.epoch_number, self.header_hash, self.nonce)
         self.assertEqual(m, self.mix_hash)
         self.assertEqual(f, self.final_hash)
 
     def test_verify(self):
-        t = ethash.verify(0, self.header_hash, self.mix_hash, self.nonce,
+        t = ubqhash.verify(self.epoch_number, self.header_hash, self.mix_hash, self.nonce,
                           self.final_hash)
         self.assertTrue(t)
         self.assertEqual(type(t), bool)

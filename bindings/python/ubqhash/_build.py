@@ -20,14 +20,15 @@ if sys.platform == 'linux':
     stdlib.append('stdc++')
 
 ffibuilder.set_source(
-    "_ethash",
+    "_ubqhash",
     r"""
     #include <ethash/keccak.h>
+    #include <ethash/blake2b.h>
     #include <ethash/ethash.h>
     #include <ethash/global_context.h>
      """,
     include_dirs=['include'],
-    libraries=['ethash-global-context', 'ethash', 'keccak'] + stdlib,
+    libraries=['ethash-global-context', 'ethash', 'keccak', 'blake2b'] + stdlib,
 )
 
 ffibuilder.cdef("""
